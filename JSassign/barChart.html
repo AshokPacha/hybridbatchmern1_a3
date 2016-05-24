@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <style>
+
+  .axis {
+    font: 13px comic,sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke:#000;
+    shape-rendering: crispEdges;
+    }
+    svg{
+      display:block;
+    margin:auto;
+}
+</style>
+  </head>
+  <body align="center">
+
+<h3>Bar chart of Top 5 countries with highest Life expectancy at birth, total (years) in   the given time period of 1960 - 2015</h3>
+    <div id="content"></div>
+<br>
+    <script>
+
+    //setting height,width and margins
+    var margin={top:20,right:20,bottom:20,left:120},
+    width=600-margin.left-margin.right,
+    height=300-margin.top-margin.bottom;
+
+
+    //setting scales for both axes
+    var xAxisScale=d3.scale.ordinal().rangeRoundBands([0,width],.5);
+    var yAxisScale=d3.scale.linear().domain([4000,4020]).range([height,0]);
+
+    //scaling the axes
+    var xAxis=d3.svg.axis().scale(xAxisScale).orient("bottom");
+    var yAxis=d3.svg.axis().scale(yAxisScale).orient("left").ticks(10);
+
+    //appending svg to div
+    var svg=d3.select("#content").append("svg").attr("height",height+margin.top+margin.bottom).attr("width",width+margin.left+margin.right)
+    .append("g").attr("transform","translate("+margin.left+","+margin.top+")");
+
+
+    //fetching data from file
+    d3.json("Total.json",function(error,data){
+      data.forEach(function(d){
+        d.country=d.country;
+        d.LifeExp=parseFloat(d.LifeExp);
+      });
+
+      //mapping data to x and y axes
+      xAxisScale.domain(data.map(function(d){return d.country}));
+      yAxisScale.domain([4100,d3.max(data,function(d){return d.LifeExp})]);
+
+      //colors
+      var color=d3.scale.linear().domain([4100,4190]).range(["blue","green"]);
+
+
+      //calling the axis functions and assigning classes to them to put css styles
+
+      //call for x-axis
+      svg.append("g").attr("class","x axis").attr("transform","translate(0,"+height+")").call(xAxis)
+      .selectAll("text").attr("transform","translate(2,2)");
+
+      //call for y axis
+      svg.append("g").attr("class","y axis").call(yAxis)
+      .append("text").attr("y",(4000-d3.max(data,function(d){return d.LifeExp}))/2).style("vertical-align","center").attr("x",-170).text("Life Expectancy(in years)").attr("transform","rotate(-90)");
+
+      //appending bars
+      svg.selectAll("barChart").data(data).enter()
+      .append("rect").attr({
+        x:function(d){return xAxisScale(d.country)},
+        y:function(d){return yAxisScale(d.LifeExp)},
+        height:function(d){return height-yAxisScale(d.LifeExp)},
+        width:xAxisScale.rangeBand(),
+        fill:function(d){return color(d.LifeExp)}
+      });
+    });
+    </script>
+        <button onclick="location.href='LECharts.html';">ChartsHome</button>
+  </body>
+  </html>

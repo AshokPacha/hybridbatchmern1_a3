@@ -1,0 +1,27 @@
+[
+ {
+  "country": "Iceland",
+  "LifeExp": 4190.372073170731,
+  "Year": "1960"
+ },
+ {
+  "country": "Sweden",
+  "LifeExp": 4171.043170731708,
+  "Year": "1960"
+ },
+ {
+  "country": "Japan",
+  "LifeExp": 4170.015121951221,
+  "Year": "1960"
+ },
+ {
+  "country": "Switzerland",
+  "LifeExp": 4153.526097560975,
+  "Year": "1960"
+ },
+ {
+  "country": "Norway",
+  "LifeExp": 4144.488292682929,
+  "Year": "1960"
+ }
+]
